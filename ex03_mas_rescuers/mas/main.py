@@ -1,11 +1,13 @@
-import sys
 import os
+import sys
 import time
+
+from explorer import Explorer
+from rescuer import Rescuer
 
 ## importa classes
 from vs.environment import Env
-from explorer import Explorer
-from rescuer import Rescuer
+
 
 def main(data_folder_name, config_ag_folder_name):
     try:
