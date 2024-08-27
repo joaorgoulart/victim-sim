@@ -1,0 +1,113 @@
+2 Objetivos da tarefa
+Partindo do cenário de 300 vítimas no terreno 90 x 90, o conjunto dos agentes socorristas (𝐴𝑠
+),
+já com o mapa da região explorada passado pelos exploradores e os clusters de vítimas
+definidos, deve socorrer o maior número das 𝑉𝑒
+(vítimas encontradas), sendo a métrica de
+desempenho do sistema o valor de 𝑉𝑠𝑔 (vítimas salvas por gravidade) dentro do tempo limite
+Ts de salvamento.
+Restrição
+Os socorristas não podem explorar novas regiões, nem ler sinais vitais de novas vítimas. Eles
+saem juntos da base (realizam os salvamentos em paralelo).
+Requisitos
+1) o conjunto dos agentes socorristas (𝐴𝑠
+) deve definir a sequência de salvamento das
+vítimas para cada cluster por meio de um Algoritmo Genético (AG).
+2) A equipe deve integrar um regressor ou um classificador (apenas um deles) para que
+os agentes possam escolher as vítimas mais graves prioritariamente no
+sequenciamento.
+2.1 Sequenciamento
+Estabelecer, para cada agente socorrista, uma sequência de salvamento do cluster pelo qual
+ele é responsável. O objetivo é minimizar o custo do percurso priorizando o salvamento das
+vítimas mais graves. Cada socorrista deve sair da base, salvar todas as vítimas possíveis e voltar
+à base dentro do tempo limite de socorro (Ts). O caminho entreas vítimas pode ser
+determinado por um algoritmo de busca (e.g. A* ou outro).
+O sistema deve gravar um arquivo texto para cada sequência de salvamento calculada
+contendo somente as vítimas salvas por ordem de visita: seq1.txt, ..., seq4.txt.
+𝒊𝒅, 𝒙, 𝒚, 𝑔𝑟𝑎𝑣, 𝑐𝑙𝑎𝑠𝑠𝑒 ## linha 1: 1ª. vítima salva do cluster
+𝒊𝒅, 𝒙, 𝒚, 𝑔𝑟𝑎𝑣, 𝑐𝑙𝑎𝑠𝑠𝑒 ## linha 2: 2ª. vítima salva do cluster
+ ...
+ 𝒊𝒅, 𝒙, 𝒚, 𝑔𝑟𝑎𝑣, 𝑐𝑙𝑎𝑠𝑠𝑒 ## linha n: n-ésima vítima salva do cluster
+Cada linha identifica uma vítima pelo seu 𝑖𝑑, na posição (𝑥, 𝑦), com valor de gravidade 𝑔𝑟𝑎𝑣 e
+a sua 𝑐𝑙𝑎𝑠𝑠𝑒. Caso não tenha estimado o valor de grav, deixe-o zerado. Caso não tenha
+estimado a classe, fixe o valor em 1.
+UTFPR/Curitiba – INTELIGÊNCIA ARTIFICIAL – 2024 – Prof. Tacla e Profa. Myriam
+T02_03_ENUNCIADO_REGRESSOR_2024_1.DOCX 2
+2.2 Regressor ou Classificador para estimar o valor ou a classe de
+gravidade
+Os agentes socorristas devem aprender a estimar o valor de gravidade ou a classe de gravidade
+das vítimas obrigatoriamente com uma rede neural. Um segundo modelo de regressão ou de
+classificação deve ser aprendido utilizando outra técnica, tal como árvore de decisão ou sistema
+de inferência fuzzy.
+Restrição
+Não é permitido utilizar as classes de gravidade como entrada para o
+regressor nem o valor de gravidade como entrada para o classificador.
+Nesta tarefa, utilizar o dataset de sinais vitais que contém os seguintes dados:
+● Id: identificação da vítima [0, n]
+● pSist: pressão diastólica (não utilizar)
+● pDiast: pressão diastólica (não utilizar)
+● qPA: qualidade da pressão arterial; resulta da avaliação da relação entre a
+pressão sistólica e a diastólica;
+● pulso: pulsação ou Batimento por Minuto (pulso)
+● frequência respiratória: frequência da respiração por minuto
+------------------------
+● gravidade: valor a ser estimado pela RN em função dos sinais
+● classes de gravidade: são 4 classes que apresentam o estado de saúde do
+acidentado. É o que deve ser predito pelo classificador:
+○ 1 = crítico,
+○ 2 = instável,
+○ 3 = potencialmente estável e
+○ 4 = estável.
+DATASETS
+● Treina/validar os modelos com o dataset de 4000 vítimas.
+● Fazer um pré-teste cego com os dois modelos utilizando o dataset de 800
+vítimas
+COMPARAÇÃO
+Comparar os dois modelos (Rede Neural x Outra Técnica) utilizando os resultados de
+treinamento/validação e do pré-teste cego.
+Experimentar diferentes configurações de modelos, ou seja, diferentes estruturas para o
+modelo de Redes Neurais: número de camadas, número de neurônios em cada camada,
+funções de ativação etc. e parâmetros de treinamento: taxa de aprendizado, algoritmo,
+momento...
+Idem para a outra técnica escolhida. Por exemplo, se for árvore de regressão é possível variar a
+profundidade máxima e o número mínimo de amostras por folha.
+UTFPR/Curitiba – INTELIGÊNCIA ARTIFICIAL – 2024 – Prof. Tacla e Profa. Myriam
+T02_03_ENUNCIADO_REGRESSOR_2024_1.DOCX 3
+Para extrair um comportamento médio independente da escolha dos dados de
+treinamento/validação realizar o processo de validação cruzada (ver as instruções no arquivo
+correspondente ao método de validação cruzada.
+Observar under/overfitting e RMSE ou acuracidade para escolher o melhor modelo a ser
+integrado ao sistema.
+3 ENTREGA
+No dia da entrega, carregar no Moodle:
+1) a versão final da apresentação,
+2) dos códigos dos programas e
+3) arquivos de saída (cluster*.txt e seq*.txt) com um print da visualização produzido pelo
+programa plot_clusters_and_seq.py
+3.1 Teste cego – avaliação do SMA
+Procedimento:
+1) Rodar o sistema multiagente de exploração e salvamento para o cenário fornecido
+na hora da apresentação:
+a. Salvar os arquivos cluster1.txt, ..., cluster4.txt
+b. Salvar os arquivos seq1.txt, ..., seq4.txt
+c. Copiar os valores de Ve1, Ve2, Ve3, Ve4, Veg, Vs1, Vs2, Vs3, Vs4, Vsg para a
+planilha indicada
+d. Carregar cluster1.txt, ..., cluster4.txt, seq1.txt, ..., seq4.txt no
+Moodle no local indicado e uma imagem dos mesmos utilizando o plot do
+programa:
+plot_clusters_and_seq.py
+3.2 Apresentação
+- As estratégias implementadas na solução
+- Os resultados de sequenciamento e análise das sequências geradas quanto ao custo dos
+caminhos e priorização das vítimas mais graves.
+- Os resultados obtidos pelo classificador ou regressor com análise baseadanas métricas
+típicas obtidos quando treinados/validados no 4000 vítimas e testados no de 800
+vítimas. A justificativa de escolha da técnica.
+- Conclusões
+- Analise o atingimento dos objetivos, a sobreadaptação da solução e sua
+generalização para os diferentes cenários utilizados.
+- O que pode ser melhorado, o que poderia ser feito no futuro para completar a
+solução (trabalhos futuros)?
+- Há problemas éticos na solução – como ela afeta a vida das pessoas envolvidas?
+A solução é neutra? A solução é enviesada? Pense em situações em que uma
+suposta neutralidade da solução pode ser perdida.
